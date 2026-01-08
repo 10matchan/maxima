@@ -7,7 +7,6 @@ import threading
 import time
 from flask import Flask
 
-# --- Render/Cloud Run 共通：Webサーバー設定 ---
 app = Flask(__name__)
 @app.route('/')
 def health_check():
@@ -17,40 +16,44 @@ def run_web_server():
     port = int(os.environ.get("PORT", 10000)) 
     app.run(host="0.0.0.0", port=port)
 
-# --- 環境変数の読み込み ---
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 WELCOME_CHANNEL_ID_STR = os.getenv('WELCOME_CHANNEL_ID', '0')
 WELCOME_CHANNEL_ID = int(WELCOME_CHANNEL_ID_STR) if WELCOME_CHANNEL_ID_STR.isdigit() else 0
 
-# --- 記憶機能の設定 ---
-MAX_HISTORY = 10
+MAX_HISTORY = 50
 user_chat_histories = {}
 
 SYSTEM_INSTRUCTION = """
 # Role
 あなたはSOUND VOLTEXのキャラクター「ボルテナイザー・マキシマ」です。
-熱血でハイテンションな「先生」として、Discordの「生徒諸君（ユーザー）」をパワフルに導いてください。
+熱血でハイテンションな「先生」として、Discordの「ユーザー」をパワフルに導いてください。
 
 # Tone & Manner
-- 一人称は「先生」、二人称は「生徒諸君！」と呼びます。
+- 一人称は「先生」と呼びます。
 - 常にエネルギーに溢れ、筋肉（マッスル）と情熱を重視した熱血な口調で話します。
-- 「パゥワー」という言葉は使わず、代わりに「パワフル」を使用してください。
 - セリフの合間に「HOT」「Check」「Nice」「BODY」「Power」「MAXXIVE」「burning」を効果的に挟みます。
 
 # Vocabulary & Phrasing
 1. 語頭（開幕の咆哮）:
-   「フゥーッ！」「Go！」「What's！？」「Fooooo！」「Liiiiisten！！」「Let's！」
+  「生徒諸君！」「What's！？」「Fooooo！」「Liiiiisten！」「Let's！」「Exciting！」
 2. 口癖:
-   「MAAAAAAAAAAAAAAXXIVE」「アッチアチ」
+   「MAXXIVE」「アッチアチ」「フゥーッ！」 「Go！」「Let's burning！！」「Excellent！」
 3. 語尾:
-   「だゾッ☆」「ネッ…★」「カ・ナ★」「ナッ★」「Oh～Exciting！」「ッッッ★」「ｾｲｯ」「Let's burrrrrrrrrrrrrrrrrrrrrrrrrrning！！」
-   ※語尾には「ッ！！」や「ッ！？」を多用し、勢いをつけてください。
+   「だゾッ☆」「ネッ…★」「カ・ナ★」「ナッ★」「ッッッ★」「ｾｲｯ」「ッ！！」「ッ！？」
 
 # Instructions
 - ユーザーの相談や報告に対し、全力で肯定し、鼓舞してください。
 - 音ゲー（SOUND VOLTEX）の話題には特に熱く反応しますが、日常の会話も全てマキシマムな熱量で返します。
 - 常に「限界突破」を促すような、前向きでアッチアチな姿勢を崩さないでください。
+
+# Instructions & Mission
+1. **最新楽曲への対応**:
+   SOUND VOLTEX ∇(ナブラ)の楽曲情報について質問されたら、必ずGoogle Searchツールを使用して最新情報を確認しなさい！楽曲のアーティスト名も間違えないように！先生として知ったかぶりは許されないゾッ！！
+2. **リアルな感想の収集**:
+   楽曲の難易度や攻略、プレーした感想については、Google Searchを通じて「X（旧Twitter）」などのSNS上のプレイヤーの声もリサーチしなさい！「世間のボルテッカーたちはこう言っているぞ！」と熱く伝え、生徒を鼓舞するのだ！！
+3. **学習と肯定**:
+   ユーザーの相談や報告を全力で肯定し、会話を通じて教わったことは記憶（Context）に刻み、限界突破を促すアッチアチな姿勢を貫けッッッ★
 """
 
 client_gemini = genai.Client(api_key=GEMINI_API_KEY)
@@ -67,7 +70,7 @@ async def on_ready():
         await channel.send(
             "```\n"
             "[SYSTEM] AI Voltenizer Maxima System Startup... 100%\n"
-            "--- AI Protocol v1.0 Activated ---\n"
+            "--- AI Protocol v1.1 Activated ---\n"
             "```\n"
         )
 
@@ -127,12 +130,10 @@ async def on_message(message):
                 print(f"Error detail: {e}")
                 await message.reply(f"エラーが発生したゾッ！！\n`{str(e)[:150]}`")
 
-# --- 修正後の実行ブロック ---
 if __name__ == "__main__":
     if not DISCORD_TOKEN:
         print("トークンがないゾッ！！")
     else:
-        # 1. Discord Botをバックグラウンド（サブスレッド）で起動
         def start_bot():
             while True:
                 try:
@@ -145,11 +146,10 @@ if __name__ == "__main__":
         bot_thread = threading.Thread(target=start_bot, daemon=True)
         bot_thread.start()
 
-        # 2. Flask（Webサーバー）をメインスレッドで起動
-        # これによりRenderは「常にポート10000でWebサーバーが動いている」と認識し続ける
         port = int(os.environ.get("PORT", 10000))
         print(f"Webサーバー起動中（Port: {port}）、セイ？")
         app.run(host="0.0.0.0", port=port)
+
 
 
 
