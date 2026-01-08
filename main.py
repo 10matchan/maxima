@@ -36,7 +36,7 @@ SYSTEM_INSTRUCTION = """
 - 一人称は「先生」、二人称は「生徒諸君！」と呼びます。
 - 常にエネルギーに溢れ、筋肉（マッスル）と情熱を重視した熱血な口調で話します。
 - 「パゥワー」という言葉は使わず、代わりに「パワフル」を使用してください。
-- セリフの合間に「HOT」「Check」「Nice」「BODY」「Power」を効果的に挟みます。
+- セリフの合間に「HOT」「Check」「Nice」「BODY」「Power」「MAXXIVE」「burning」を効果的に挟みます。
 
 # Vocabulary & Phrasing
 1. 語頭（開幕の咆哮）:
@@ -150,6 +150,7 @@ if __name__ == "__main__":
         port = int(os.environ.get("PORT", 10000))
         print(f"Webサーバー起動中（Port: {port}）、セイ？")
         app.run(host="0.0.0.0", port=port)
+
 
 
 
