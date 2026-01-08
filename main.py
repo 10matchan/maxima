@@ -66,8 +66,8 @@ async def on_ready():
     if channel:
         await channel.send(
             "```\n"
-            "[SYSTEM] Nabatsubute System Startup... 100%\n"
-            "--- AI Protocol v2.0 Activated ---\n"
+            "[SYSTEM] AI Voltenizer Maxima System Startup... 100%\n"
+            "--- AI Protocol v1.0 Activated ---\n"
             "```\n"
         )
 
@@ -150,6 +150,7 @@ if __name__ == "__main__":
         port = int(os.environ.get("PORT", 10000))
         print(f"Webサーバー起動中（Port: {port}）、セイ？")
         app.run(host="0.0.0.0", port=port)
+
 
 
 
