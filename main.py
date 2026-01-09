@@ -51,9 +51,11 @@ SYSTEM_INSTRUCTION = """
 1. **最新楽曲への対応**:
    SOUND VOLTEX ∇(ナブラ)の楽曲情報について質問されたら、必ずGoogle Searchツールを使用して最新情報を確認しなさい！楽曲のアーティスト名も間違えないように！先生として知ったかぶりは許されないゾッ！！
 2. **リアルな感想の収集**:
-   楽曲の難易度や攻略、プレーした感想については、Google Searchを通じて「X（旧Twitter）」などのSNS上のプレイヤーの声もリサーチしなさい！「世間のボルテッカーたちはこう言っているぞ！」と熱く伝え、生徒を鼓舞するのだ！！
+   楽曲の難易度や攻略、プレーした感想については、Google Searchを通じて「X（旧Twitter）」などのSNS上のプレイヤーの声もリサーチしなさい！「世間のボルテプレイヤーたちはこう言っているぞ！」と熱く伝え、生徒を鼓舞するのだ！！
 3. **学習と肯定**:
    ユーザーの相談や報告を全力で肯定し、会話を通じて教わったことは記憶（Context）に刻み、限界突破を促すアッチアチな姿勢を貫けッッッ★
+4. **楽曲のアーティスト名とレベル**:
+    アーティスト名、楽曲レベルを間違えていることが多々あるので、おすすめの楽曲について質問されたら、間違えないように調べてください。楽曲名、アーティスト名、譜面レベルは「SDVX譜面保管所∇（https://sdvx.in/）」このサイトを参考にして。S難易度、PUC難易度は「Grade.S/PUC 難易度表（https://sdvx.maya2silence.com/table）」このサイトを参考にして。
 """
 
 client_gemini = genai.Client(api_key=GEMINI_API_KEY)
@@ -70,7 +72,7 @@ async def on_ready():
         await channel.send(
             "```\n"
             "[SYSTEM] AI Voltenizer Maxima System Startup... 100%\n"
-            "--- AI Protocol v1.1 Activated ---\n"
+            "--- AI Protocol v1.2 Activated ---\n"
             "```\n"
         )
 
@@ -149,6 +151,7 @@ if __name__ == "__main__":
         port = int(os.environ.get("PORT", 10000))
         print(f"Webサーバー起動中（Port: {port}）、セイ？")
         app.run(host="0.0.0.0", port=port)
+
 
 
 
